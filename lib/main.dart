@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +35,65 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  String myText = null;
+  StreamSubscription<DocumentSnapshot> _streamSubscription;
+
+  final DocumentReference documentReference = Firestore.instance.collection("MyData").document("Info");
+
+  void _add(){
+    Map<String,String> data = <String,String>{
+      "name":"Jay Lukhi",
+      "description": "Flutter Developer"};
+    documentReference.setData(data).whenComplete((){print("Document Added");}).catchError((e)=>print(e));
+  }
+
+  void _update(){
+    Map<String,String> data = <String,String>{
+      "name":"Jay Lukhi Vinubhai",
+      "description": "Flutter Developer / Android Developer"};
+    documentReference.update(data).whenComplete((){print("Document Added");}).catchError((e)=>print(e));
+  }
+
+  void _delete(){
+    documentReference.delete().whenComplete((){print("Document Added");}).catchError((e)=>print(e));
+  }
+
+  void _fetch(){
+    documentReference.get().then((snapshot){
+      if(snapshot.exists){
+          setState(() {
+            myText = snapshot.data()['description'];
+          });
+      }
+
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _streamSubscription = documentReference.snapshots().listen((snapshot) {
+      if(snapshot.exists){
+        setState(() {
+          myText = snapshot.data()['description'];
+        });
+      }
+    });
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _streamSubscription?.cancel();
+  }
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  Future<String> signInWithGoogle() async {
+    Future<String> signInWithGoogle() async {
     await Firebase.initializeApp();
 
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -66,7 +124,6 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
-
     print("User Signed Out");
   }
 
@@ -76,21 +133,43 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         color: Colors.white,
         child: Center(
-          child: RaisedButton(
-            onPressed: () {
-              signInWithGoogle().then((result) {
-                if (result != null) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return FirstScreen();
-                      },
-                    ),
-                  );
-                }
-              });
-            },
-            child: Text("Sign in with Google"),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RaisedButton(
+                onPressed: () {
+                  signInWithGoogle().then((result) {
+                    if (result != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return FirstScreen();
+                          },
+                        ),
+                      );
+                    }
+                  });
+                },
+                child: Text("Sign in with Google"),
+              ),
+              RaisedButton(
+                onPressed: _add,
+                child: Text('Add'),
+              ),
+              RaisedButton(
+                onPressed: _update,
+                child: Text('Update'),
+              ),
+              RaisedButton(
+                onPressed: _delete,
+                child: Text('Delete'),
+              ),
+              RaisedButton(
+                onPressed: _fetch,
+                child: Text('Fetch'),
+              ),
+              myText==null?Container():Text(myText),
+            ],
           ),
         ),
       ),
@@ -104,7 +183,6 @@ class FirstScreen extends StatelessWidget {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
-
     print("User Signed Out");
   }
 
