@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firestore/Drawer/BackDropPage.dart';
+import 'package:firestore/Lists/ExpandableList.dart';
+import 'package:firestore/Lists/StickyList.dart';
 import 'package:firestore/Shopping/Model/cartitem.dart';
 import 'package:flutter_redux_dev_tools/flutter_redux_dev_tools.dart';
 import 'Shopping/shoppingcart.dart';
@@ -144,33 +147,69 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   });
                 },
-                child: Text("Sign in with Google"),
+                child: Text("Sign in with Google",style: TextStyle(fontSize: 20)),
               ),
-              RaisedButton(
-                onPressed: _add,
-                child: Text('Add'),
+              Row(
+                children: [
+                  Spacer(),
+                  RaisedButton(
+                    onPressed: _add,
+                    child: Text('Add',style: TextStyle(fontSize: 20)),
+                  ),
+                  Spacer(),
+                  RaisedButton(
+                    onPressed: _update,
+                    child: Text('Update',style: TextStyle(fontSize: 20)),
+                  ),
+                  Spacer(),
+                  RaisedButton(
+                    onPressed: _delete,
+                    child: Text('Delete',style: TextStyle(fontSize: 20)),
+                  ),
+                  Spacer(),
+                  RaisedButton(
+                    onPressed: _fetch,
+                    child: Text('Fetch',style: TextStyle(fontSize: 20)),
+                  ),
+                  Spacer(),
+                ],
               ),
-              RaisedButton(
-                onPressed: _update,
-                child: Text('Update'),
+              Container(
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    border: Border.all(color: Colors.blueAccent)
+                ),
+                child: myText==null?Container():Text(myText,style: TextStyle(fontSize: 15,color: Colors.black),),
               ),
-              RaisedButton(
-                onPressed: _delete,
-                child: Text('Delete'),
-              ),
-              RaisedButton(
-                onPressed: _fetch,
-                child: Text('Fetch'),
-              ),
+              
               RaisedButton(
                 onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => WallPaper(),));},
-                child: Text('WallPaper'),
+                child: Text('WallPaper',style: TextStyle(fontSize: 20)),
               ),
               RaisedButton(
                 onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ShoppingCart(store:store),));},
-                child: Text('Shopping'),
+                child: Text('Shopping',style: TextStyle(fontSize: 20)),
               ),
-              myText==null?Container():Text(myText),
+              Row(
+                children: [
+                  Spacer(),
+                  RaisedButton(
+                    onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ExpandableList(),));},
+                    child: Text('Expandable List',style: TextStyle(fontSize: 20)),
+                  ),
+                  Spacer(),
+                  RaisedButton(
+                    onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => StickyList(),));},
+                    child: Text('Sticky List',style: TextStyle(fontSize: 20)),
+                  ),
+                  Spacer(),
+                ],
+              ),
+              RaisedButton(
+                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => BackDropPage(),));},
+                child: Text('Drawer',style: TextStyle(fontSize: 20)),
+              ),
             ],
           ),
         ),

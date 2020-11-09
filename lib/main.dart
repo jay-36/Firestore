@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore/Login.dart';
 import 'package:firestore/Shopping/Redux/reducers.dart';
 import 'package:firestore/Shopping/shoppingcart.dart';
+import 'package:firestore/try.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'Shopping/Model/cartitem.dart';
 import 'file:///D:/Flutter_project/firestore/lib/WallPaper/Wallpaper.dart';
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginPage(store:store),
+        // home: LoginPage(store:store),
+        home: LoginPage(),
       ),
     );
   }

@@ -110,8 +110,8 @@ class _WallPaperState extends State<WallPaper> {
               },
               staggeredTileBuilder: (i) =>
                   new StaggeredTile.count(2, i.isEven ? 2 : 3),
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
             )
           : new Center(
               child: new CircularProgressIndicator(),
